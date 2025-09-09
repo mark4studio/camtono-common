@@ -1,30 +1,30 @@
-import React from 'react';
-
 export type CamtonoIcon = {
-  svg: React.ReactElement;
-  label?: string;
-  category?: string;
-  tags?: string[];
+  slug: string;
+  label: string;
+  category: string;
+  svg: React.FunctionComponent<any>;
+  tags: string[];
+  more: Record<string, any>;
 };
 
-type IconGroup = Record<string, CamtonoIcon>;
-let iconLibrary: Record<string, IconGroup> = {};
+export namespace camtono {
+  export namespace customizer {
+    
+    type IconLibrary =  Record<string, CamtonoIcon[]>;
+    let iconLibrary:IconLibrary = {};
+    
+    export function registerIcons(
+      groupName: string,
+      icons: CamtonoIcon[]
+    ) {
+      if (!iconLibrary[groupName]) {
+        iconLibrary[groupName] = [];
+      }
+      iconLibrary[groupName] = iconLibrary[groupName].concat(icons);
+    }
 
-export const registerIcons = (groupName: string, icons: IconGroup) => {
-  if (typeof icons !== 'object' || Array.isArray(icons)) {
-    throw new Error('icons must be an object with named CamtonoIcon entries');
+    export function getIcons() {
+      return iconLibrary;
+    }
   }
-
-  if (!iconLibrary[groupName]) {
-    iconLibrary[groupName] = {};
-  }
-
-  iconLibrary[groupName] = {
-    ...iconLibrary[groupName],
-    ...icons
-  };
-};
-
-export const getIcons = () => {
-    return iconLibrary;
 }
